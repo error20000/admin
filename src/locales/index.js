@@ -42,6 +42,7 @@ export const setLang = lang => {
 }
 
 setLang();
+i18n.setLang = setLang;
 
 window.i18n = i18n;
 

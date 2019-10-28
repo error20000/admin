@@ -2,6 +2,7 @@
 const zhCN = require('element-ui/lib/locale/lang/zh-CN');
 
 const zh = Object.assign({
+    name: "中文",
     sysName: "后台管理",
     res:{
         message: {
@@ -36,17 +37,31 @@ const zh = Object.assign({
             content: "确定退出系统吗？", 
         }
     },
-    changePassword: {
-        dialog: {
-            title: "密码修改",
-            close: "关闭",
-            cancel: "取消",
-            submit: "提交", 
+    dialog: {
+        close: "关闭",
+        cancel: "取消",
+        submit: "提交", 
+    },
+    index: {
+        dropdown:{
+            pwd: "修改密码",
+            logout: "退出",
         },
-        form: {
-            oldPwd: "旧密码",
-            newPwd: "新密码",
-            newPwd2: "确认新密码",
+        changePassword: {
+            dialog: {
+                title: "密码修改",
+            },
+            form: {
+                oldPwd: "旧密码",
+                newPwd: "新密码",
+                newPwd2: "确认新密码",
+            },
+            rules: {
+                oldPwd: "请输入旧密码",
+                newPwd: "请输入新密码",
+                newPwd2: "再次输入新密码",
+                newPwd3: "密码不一致!",
+            }
         }
     }
 }, zhCN.default);

@@ -3,7 +3,7 @@
       <template v-for="(item, index) in menuData">
         <el-submenu v-if="item[childrenKey] && item[childrenKey].length > 0" :index="item[indexKey]" :key="index">
           <template slot="title">
-            <i :class="item[iconKey] ? item[iconKey]: 'fa fa-key fa-fw' "></i>
+            <i :class="item[iconKey] ? item[iconKey]: '' "></i>
             <span>{{ item[nameKey] }}</span>
           </template>
           <menu-tree 
@@ -17,7 +17,7 @@
 
         <el-menu-item v-else :index="item[indexKey]" :key="index">
           <template slot="title">
-            <i :class="item[iconKey] ? item[iconKey]: 'fa fa-key fa-fw' "></i>
+            <i :class="item[iconKey] ? item[iconKey]: '' "></i>
             <span>{{ item[nameKey] }}</span>
           </template>
         </el-menu-item>
@@ -57,6 +57,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 
 </style>

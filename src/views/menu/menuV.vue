@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <el-menu 
-      background-color="#20a0ff" 
+      background-color="#004b91" 
       text-color="#fff" 
       active-text-color="#ffd04b" 
       class="el-menu-vertical-demo" 
@@ -121,19 +121,6 @@
   }
 </script>
 
-<style>
-  .el-menu{
-    flex: 1;
-    border-right: none !important;
-  }
-  .el-menu .fa {
-    vertical-align: middle;
-    margin-right: 5px;
-    width: 24px;
-    text-align: center;
-    font-size: 18px;
-  }
-  .el-menu i {
-    color: #ffffff !important;
-  }
+<style scoped>
+
 </style>
