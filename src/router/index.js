@@ -31,15 +31,24 @@ const routes = [
       {
         path: '/test',
         component: page('Test')
-      }
+      },{
+        path: '/user',
+        component: page('User')
+      },
     ]
+  },
+  //test
+  {
+    path: '/test2',
+    name: 'test',
+    component: page('Test')
   }
 ]
 
 
 const router = new VueRouter({
   mode: 'history',
-  // base: process.env.BASE_URL,
+  base: process.env.BASE_URL,
   routes
 })
 

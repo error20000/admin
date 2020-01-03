@@ -97,11 +97,11 @@ export default {
       languageOpt: [],
       //menu
       menus: [],
-      nameKey: "sMenu_Name",
-      iconKey: "sMenu_Icon",
-      indexKey: "sMenu_ID",
-      pathKey: "sMenu_Url",
-      childrenKey: "children",
+      nameKey: this.$store.state.field.menu.name,
+      iconKey: this.$store.state.field.menu.icon,
+      indexKey: this.$store.state.field.menu.index,
+      pathKey: this.$store.state.field.menu.path,
+      childrenKey: this.$store.state.field.menu.children,
       //pwd
       pwdFormVisible: false,
       pwdLoading: false,
@@ -190,10 +190,10 @@ export default {
         .catch(function() {});
     },
     userAuthMenu: function() {
-      let treeStr = localStorage.getItem(this.$store.state.menusTreeDataKey);
-      let treeOrg = localStorage.getItem(this.$store.state.menusDataKey);
+      let treeStr = localStorage.getItem(this.$store.state.storage.menusTreeDataKey);
+      let treeOrg = localStorage.getItem(this.$store.state.storage.menusDataKey);
       this.menus = JSON.parse(treeStr);
-      this.$store.dispatch("setMenusData", JSON.parse(treeOrg));
+      //this.$store.dispatch("setMenusData", JSON.parse(treeOrg));
     },
     isLogin: function(cb) {
       let params = {};

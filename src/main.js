@@ -20,6 +20,28 @@ Vue.use(global);
 
 Vue.config.productionTip = false;
 
+//自定义指令--权限验证
+Vue.directive('hasAuth', {
+  inserted: function (el, binding, vnode) {
+    let flag = true;
+    let auth = binding.value;
+    let menuFuns = store.state.cache.menuFunsData;
+    if(!menuFuns){
+      menuFuns = JSON.parse(localStorage.getItem(store.state.storage.menuFunsDataKey));
+      store.state.cache.menuFunsData = menuFuns;
+    }
+    for (var i = 0; i < menuFuns.length; i++) {
+      if(menuFuns[i][store.state.field.menuFunsButton] == auth){
+        flag = false;
+        break;
+      }
+    }
+    if(flag){
+      el.parentNode.removeChild(el);
+    }
+　}
+});
+
 //全局变量
 window.LOCALE_LOIN_USER_KEY = 'loginUser';
 window.LOCALE_LOIN_URL = '/login';

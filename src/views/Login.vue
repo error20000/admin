@@ -101,6 +101,17 @@ export default {
       this.ajaxReq(authUrl, params, function(res) {
         self.handleResQuery(res, function() {
           let menus = res.data.menus;
+          let order = this.$store.state.field.menu.order;
+          //排序
+          for (let i = 0; i < menus.length; i++) {
+            for (let j = 0; j < menus.length; j++) {
+              if(menus[j][order] > menus[i][order]){
+                let temp = menus[i];
+                menus[i] = menus[j];
+                menus[j] = temp;
+              }
+            }
+          }
           //组装树
           let menusTree = []; //menu tree
           for (var i = 0; i < menus.length; i++) {
@@ -114,9 +125,9 @@ export default {
             }
           }
           //本地存储
-          localStorage.setItem(self.$store.state.menusTreeDataKey, JSON.stringify(menusTree));
-          localStorage.setItem(self.$store.state.menusDataKey, JSON.stringify(res.data.menus));
-          localStorage.setItem(self.$store.state.menuFunsDataKey, JSON.stringify(res.data.funs));
+          localStorage.setItem(self.$store.state.storage.menusTreeDataKey, JSON.stringify(menusTree));
+          localStorage.setItem(self.$store.state.storage.menusDataKey, JSON.stringify(res.data.menus));
+          localStorage.setItem(self.$store.state.storage.menuFunsDataKey, JSON.stringify(res.data.funs));
           //跳转
           window.location.href = "/index";
         });
