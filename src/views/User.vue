@@ -6,14 +6,14 @@
 			<el-tabs value="filter" >
 				<el-tab-pane :label="$t('label.filter')" name="filter" disabled>
 				<el-form size="mini" :inline="true" :model="filters" style="float: right;">
-					<el-form-item>
-						  <el-input v-model="filters.sUser_UserName" :placeholder="$t('user.placeholder.username')" clearable></el-input>
+					<el-form-item v-if="fields.username">
+						  <el-input v-model="filters[fields.username.field]" :placeholder="$t('user.placeholder.username')" clearable></el-input>
 					</el-form-item>
-					<el-form-item>
-						  <el-input v-model="filters.sUser_Nick" :placeholder="$t('user.placeholder.nick')" clearable></el-input>
+					<el-form-item v-if="fields.nick">
+						  <el-input v-model="filters[fields.nick.field]" :placeholder="$t('user.placeholder.nick')" clearable></el-input>
 					</el-form-item>
-					<el-form-item>
-						<el-select v-model="filters.sUser_GroupID" :placeholder="$t('user.placeholder.group')">
+					<el-form-item v-if="fields.group">
+						<el-select v-model="filters[fields.group.field]" :placeholder="$t('user.placeholder.group')">
 							<el-option
 							  v-for="item in groupOptions"
 							  :key="item.value"
@@ -103,16 +103,13 @@
 
 <script>
 
-import { userUrl } from "@/api";
+import { userUrl, groupUrl } from "@/api";
 
 export default {
-  data: function() {
-	return {
+	data: function() {
+		return {
 				activeTab: 'table',
 				filters: {
-					sUser_UserName: '',
-					sUser_Nick: '',
-					sUser_GroupID: ''
 				},
 				tableMaxWidth: {
 					'1': 0,
@@ -371,6 +368,7 @@ export default {
 						name: i18n.t("user.fields.group"),
 						field: this.$store.state.fields.user.group,
 						table: {
+							formatter: this.groupFormatter
 						},
 						form: {
 							type: "",
@@ -431,6 +429,7 @@ export default {
 						name: i18n.t("normal.fields.createDate"),
 						field: this.$store.state.fields.user.createDate,
 						table: {
+							formatter: this.dateFormatter
 						},
 						form: {
 							type: "",
@@ -439,7 +438,7 @@ export default {
 					},
 				}
 			}
-  },
+	},
   
 	/* watch:{
 		//表格宽度自适应
@@ -461,102 +460,124 @@ export default {
 			});
 		}
 	}, */
-  methods: {
-	//查询
-	query: function(){
-	  this.page = 1;
-	  this.getList();
-	},
-	handleSizeChange: function (val) {
-	  this.rows = val;
-	  this.getList();
-	},
-	handleCurrentChange: function (val) {
-	  this.page = val;
-	  this.getList();
-	},
-	selsChange: function (sels) {
-	  this.sels = sels;
-	},
-	getList: function(){
-		if(!this.hasAuth(this.authKey.query)){
-			this.$message.error(i18n.t("res.message.noAuth"));
-			return;
-		}
-		var self = this;
-		var params = {
-			page: this.page,
-			rows: this.rows
-		};
-		for ( var key in this.filters) {
-			if(this.filters[key]){
-				params[key] = this.filters[key];
+	methods: {
+		dateFormatter: function(row){
+			return this.formatDate(row[this.$store.state.fields.user.createDate], 'yyyy-MM-dd HH:mm:ss');
+		},
+		groupFormatter: function(row){
+			var name = row[this.$store.state.fields.user.group];
+			for (var i = 0; i < this.groupOptions.length; i++) {
+				var item = this.groupOptions[i];
+				if(row[this.$store.state.fields.user.group] == item.value){
+					name = item.name;
+					break
+				}
 			}
-		}
-		this.listLoading = true;
-		this.ajaxReq(userUrl.query, params, function(res){
-			self.listLoading = false;
-			self.handleResQuery(res, function(){
-				self.total = res.total;
-				self.list = res.data;
-				/*if(self.page != 1 && self.total <= (self.page - 1) * self.rows){
-					self.page = self.page - 1;
-					self.getList();
-				}*/
+			return name;
+		},
+		handleGroupOptions: function(cb){
+			var self = this;
+			var params = {};
+			this.ajaxReq(groupUrl.all, params, function(res){
+				self.handleResQuery(res, function(){
+					self.groupOptions = [];
+					for (var i = 0; i < res.data.length; i++) {
+						let node = res.data[i];
+						node.name = node[self.$store.state.fields.group.name];
+						node.value = node[self.$store.state.fields.group.pid];
+						self.groupOptions.push(node);
+					}
+					if(typeof cb == 'function'){
+						cb();
+					}
+				});
 			});
-		});
-	},
-	reset: function(){
-	  this.filters = {
-		sUser_UserName: '',
-		sUser_Nick: '',
-		sUser_GroupID: ''
-	  };
-	  this.getList();
-	},
-	//新增
-	handleAdd: function(){
+		},
+		//查询
+		query: function(){
+			this.page = 1;
+			this.getList();
+		},
+		handleSizeChange: function (val) {
+			this.rows = val;
+			this.getList();
+		},
+		handleCurrentChange: function (val) {
+			this.page = val;
+			this.getList();
+		},
+		selsChange: function (sels) {
+			this.sels = sels;
+		},
+		getList: function(){
+			if(!this.hasAuth(this.authKey.query)){
+				this.$message.error(i18n.t("res.message.noAuth"));
+				return;
+			}
+			var self = this;
+			var params = {
+				page: this.page,
+				rows: this.rows
+			};
+			for ( var key in this.filters) {
+				if(this.filters[key]){
+					params[key] = this.filters[key];
+				}
+			}
+			this.listLoading = true;
+			this.ajaxReq(userUrl.query, params, function(res){
+				self.listLoading = false;
+				self.handleResQuery(res, function(){
+					self.total = res.total;
+					self.list = res.data;
+					/*if(self.page != 1 && self.total <= (self.page - 1) * self.rows){
+						self.page = self.page - 1;
+						self.getList();
+					}*/
+				});
+			});
+		},
+		reset: function(){
+			this.filters = {};
+			this.getList();
+		},
+		//新增
+		handleAdd: function(){
 
-	},
-	//导入
-	getImport: function(){
+		},
+		//导入
+		getImport: function(){
 
-	},
-	//导出
-	getExcel: function(){
+		},
+		//导出
+		getExcel: function(){
 
-	},
-	//判断权限
-	hasAuth: function(auth){
-		if(typeof this.authCache[auth] != "undefined"){
-			return this.authCache[auth];
-		}
-		let fun = this.getAuth(auth, this.menuFuns, this.$store.state.fields.menuFun.button);
-		if(fun){
-			this.authCache[auth] = true;
-			return true;
-		}
-		return false;
-	},
-	//初始化
-	init: function(){
-		//权限
-		this.menuFuns = this.$store.state.cache.menuFunsData;
-		if(!this.menuFuns){
-			this.menuFuns = JSON.parse(localStorage.getItem(this.$store.state.storage.menuFunsDataKey));
-			this.$store.state.cache.menuFunsData = this.menuFuns;
-		}
-		//字段隐藏
-		for (const key in this.fields) {
-			if (!this.$store.state.fields.user[key]) {
-				this.$set(this.fields[key], 'show', false);
+		},
+		//判断权限
+		hasAuth: function(auth){
+			if(typeof this.authCache[auth] != "undefined"){
+				return this.authCache[auth];
+			}
+			let fun = this.getAuth(auth, this.menuFuns, this.$store.state.fields.menuFun.button);
+			if(fun){
+				this.authCache[auth] = true;
+				return true;
+			}
+			return false;
+		},
+		//初始化
+		init: function(){
+			//权限
+			this.menuFuns = this.$store.state.cache.menuFunsData;
+			if(!this.menuFuns){
+				this.menuFuns = JSON.parse(localStorage.getItem(this.$store.state.storage.menuFunsDataKey));
+				this.$store.state.cache.menuFunsData = this.menuFuns;
 			}
 		}
-		console.log(this.fields);
-	}
-  },
-  mounted: function() {
+  	},
+  	mounted: function() {
 		this.init();
+		this.handleGroupOptions();
 		this.getList();
 	}
 }

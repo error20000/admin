@@ -10,6 +10,11 @@ module.exports = {
     //user
     userUrl: {
         query: "/api/user/findPage",
+    },
+    //group
+    groupUrl: {
+        all: "/api/group/findAll",
+        query: "/api/group/findPage",
     }
 
 }

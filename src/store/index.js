@@ -42,7 +42,11 @@ export default new Vuex.Store({
         		phone: "sUser_Phone",
         		third: "sUser_ThirdID",
         		createDate: "dUser_CreateDate",
-      		},
+			},
+			group:{
+				pid: "sGroup_ID",
+				name: "sGroup_Name",
+			} 
     	},
     	//缓存
     	cache: {
