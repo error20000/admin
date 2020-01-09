@@ -60,6 +60,22 @@ function getLang(){
     }
     return lang;
 };
+function getAuth(auth, menuFuns, key){
+	let fun = null;
+	if(!auth){
+		return fun;
+	}
+	if(!menuFuns){
+		return fun;
+	}
+	for (var i = 0; i < menuFuns.length; i++) {
+		if(menuFuns[i][key] == auth){
+			fun = menuFuns[i][key];
+		  	break;
+		}
+	}
+	return fun;
+};
 function toLogin(){
     localStorage.removeItem(LOCALE_LOIN_USER_KEY);
     parent.window.location.href = LOCALE_LOIN_URL;
@@ -193,7 +209,9 @@ export default {
       Vue.prototype.ajaxReq = ajaxReq;
       Vue.prototype.ajaxReqSync = ajaxReqSync;
       Vue.prototype.getLoginToken = getLoginToken;
-      Vue.prototype.getLang = getLang;
+	  Vue.prototype.getLang = getLang;
+	  Vue.prototype.getAuth = getAuth;
+	  
       Vue.prototype.toLogin = toLogin;
       Vue.prototype.handleResQuery = handleResQuery;
       Vue.prototype.handleResOperate = handleResOperate;

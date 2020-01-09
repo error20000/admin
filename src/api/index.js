@@ -7,4 +7,9 @@ module.exports = {
     authUrl: "/api/user/authMenu",
     changePwdUrl: "/api/user/changePWD",
 
+    //user
+    userUrl: {
+        query: "/api/user/findPage",
+    }
+
 }

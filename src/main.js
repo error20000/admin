@@ -13,8 +13,8 @@ import global from './global';
 //ElementLocale.i18n((key, value) => i18n.t(key, value));
 
 Vue.use(ElementUI, { 
-  size: 'mini',
-  i18n: (key, value) => i18n.t(key, value)
+	size: 'mini',
+	i18n: (key, value) => i18n.t(key, value)
 });
 Vue.use(global);
 
@@ -22,29 +22,30 @@ Vue.config.productionTip = false;
 
 //自定义指令--权限验证
 Vue.directive('hasAuth', {
-  inserted: function (el, binding, vnode) {
-    let flag = true;
-    let auth = binding.value;
-    let menuFuns = store.state.cache.menuFunsData;
-    if(!menuFuns){
-      menuFuns = JSON.parse(localStorage.getItem(store.state.storage.menuFunsDataKey));
-      store.state.cache.menuFunsData = menuFuns;
-    }
-    for (var i = 0; i < menuFuns.length; i++) {
-      if(menuFuns[i][store.state.field.menuFunsButton] == auth){
-        flag = false;
-        break;
-      }
-    }
-    if(flag){
-      el.parentNode.removeChild(el);
-    }
-　}
+	inserted: function (el, binding, vnode) {
+		let auth = binding.value;
+		let menuFuns = store.state.cache.menuFunsData;
+		if(!menuFuns){
+			menuFuns = JSON.parse(localStorage.getItem(store.state.storage.menuFunsDataKey));
+			store.state.cache.menuFunsData = menuFuns;
+		}
+		let flag = false;
+		for (var i = 0; i < menuFuns.length; i++) {
+			if(menuFuns[i][store.state.fields.menuFun.button] == auth){
+			  flag = true;
+			  break;
+			}
+		}
+    	if(!flag){
+      		el.parentNode.removeChild(el);
+    	}
+　	}
 });
 
 //全局变量
 window.LOCALE_LOIN_USER_KEY = 'loginUser';
-window.LOCALE_LOIN_URL = '/login';
+window.LOCALE_LOIN_URL = 'login';
+window.LOCALE_INDEX_URL = 'index';
 
 new Vue({
   router,

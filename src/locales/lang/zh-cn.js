@@ -13,6 +13,17 @@ const zh = Object.assign({
             failed: "失败",
         }
     },
+    label: {
+        filter: "筛选",
+        result: "结果",
+        title: {
+            query: "查询",
+            reset: "重置",
+            import: "导入",
+            export: "导出",
+            add: "新增",
+        }
+    },
     confirm:{
         title: "提示",
         content: "确定提交吗?", 
@@ -62,6 +73,31 @@ const zh = Object.assign({
                 newPwd2: "再次输入新密码",
                 newPwd3: "密码不一致!",
             }
+        }
+    },
+    //自定义
+    normal: {
+        fields:{
+            pid: "ID",
+            status: "状态",
+            createDate: "创建日期",
+        }
+    },
+    user: {
+        placeholder: {
+            nick: "请输入用户昵称",
+            username: "请输入用户名",
+            group: "请选择用户组",
+        },
+        fields:{
+            username: "用户名",
+            nick: "昵称",
+            password: "密码",
+            group: "用户组",
+            qq: "QQ",
+            email: "邮箱",
+            phone: "电话",
+            third: "第三方ID",
         }
     }
 }, zhCN.default);

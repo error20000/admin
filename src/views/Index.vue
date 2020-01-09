@@ -97,11 +97,11 @@ export default {
       languageOpt: [],
       //menu
       menus: [],
-      nameKey: this.$store.state.field.menu.name,
-      iconKey: this.$store.state.field.menu.icon,
-      indexKey: this.$store.state.field.menu.index,
-      pathKey: this.$store.state.field.menu.path,
-      childrenKey: this.$store.state.field.menu.children,
+      nameKey: this.$store.state.fields.menu.name,
+      iconKey: this.$store.state.fields.menu.icon,
+      indexKey: this.$store.state.fields.menu.index,
+      pathKey: this.$store.state.fields.menu.path,
+      childrenKey: this.$store.state.fields.menu.children,
       //pwd
       pwdFormVisible: false,
       pwdLoading: false,
@@ -199,13 +199,10 @@ export default {
       let params = {};
       let self = this;
       this.ajaxReq(isLoginUrl, params, function(res) {
-        self.handleResQuery(
-          res,
-          function() {
+        self.handleResQuery( res, function() {
             self.user = res.data;
-            self.sysUserName = self.user.sUser_Nick
-              ? self.user.sUser_Nick
-              : self.user.sUser_UserName;
+            self.sysUserName = self.user[self.$store.state.fields.user.nick]
+              ? self.user[self.$store.state.fields.user.nick] : self.user[self.$store.state.fields.user.username];
           },
           function() {
             localStorage.removeItem(LOCALE_LOIN_USER_KEY);
