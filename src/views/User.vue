@@ -1,48 +1,48 @@
 <template>
-  <div>
-	  <el-row class="filter">
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-col :span="24">
-			<el-tabs value="filter" >
-				<el-tab-pane :label="$t('label.filter')" name="filter" disabled>
-				<el-form size="mini" :inline="true" :model="filters" style="float: right;">
-					<el-form-item v-if="fields.username">
-						  <el-input v-model="filters[fields.username.field]" :placeholder="$t('user.placeholder.username')" clearable></el-input>
-					</el-form-item>
-					<el-form-item v-if="fields.nick">
-						  <el-input v-model="filters[fields.nick.field]" :placeholder="$t('user.placeholder.nick')" clearable></el-input>
-					</el-form-item>
-					<el-form-item v-if="fields.group">
-						<el-select v-model="filters[fields.group.field]" :placeholder="$t('user.placeholder.group')">
-							<el-option
-							  v-for="item in groupOptions"
-							  :key="item.value"
-							  :label="item.name"
-							  :value="item.value">
-							</el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" :title="$t('label.title.query')" @click="query" icon="fa fa-search"></el-button>
-						<el-button @click="reset" :title="$t('label.title.reset')" icon="fas fa-redo"></el-button>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<el-button type="primary" :title="$t('label.title.import')" @click="getImport" icon="fas fa-file-import" v-hasAuth="authKey.import"></el-button>
-						<el-button type="primary" :title="$t('label.title.export')" @click="getExcel" icon="fas fa-file-export" v-hasAuth="authKey.export"></el-button>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<el-button type="primary" :title="$t('label.title.add')" @click="handleAdd" icon="fas fa-plus" v-hasAuth="authKey.add"></el-button>
-					</el-form-item>
-				</el-form>
-				</el-tab-pane>
-			</el-tabs>
-				
+	<div>
+		<el-row class="filter">
+			<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+				<el-col :span="24">
+				<el-tabs value="filter" >
+					<el-tab-pane :label="$t('label.filter')" name="filter" disabled>
+					<el-form  :inline="true" :model="filters" style="float: right;">
+						<el-form-item v-if="fields.username">
+							<el-input v-model="filters[fields.username.field]" :placeholder="$t('user.placeholder.username')" clearable></el-input>
+						</el-form-item>
+						<el-form-item v-if="fields.nick">
+							<el-input v-model="filters[fields.nick.field]" :placeholder="$t('user.placeholder.nick')" clearable></el-input>
+						</el-form-item>
+						<el-form-item v-if="fields.group">
+							<el-select v-model="filters[fields.group.field]" :placeholder="$t('user.placeholder.group')">
+								<el-option
+								v-for="item in groupOptions"
+								:key="item.value"
+								:label="item.name"
+								:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item>
+							<el-button type="primary" :title="$t('label.title.query')" @click="query" icon="fa fa-search"></el-button>
+							<el-button @click="reset" :title="$t('label.title.reset')" icon="fas fa-redo"></el-button>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<el-button type="primary" :title="$t('label.title.import')" @click="getImport" icon="fas fa-file-import" v-hasAuth="authKey.import"></el-button>
+							<el-button type="primary" :title="$t('label.title.export')" @click="getExcel" icon="fas fa-file-export" v-hasAuth="authKey.export"></el-button>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<el-button type="primary" :title="$t('label.title.add')" @click="handleAdd" icon="fas fa-plus" v-hasAuth="authKey.add"></el-button>
+						</el-form-item>
+					</el-form>
+					</el-tab-pane>
+				</el-tabs>
+					
+				</el-col>
 			</el-col>
-		</el-col>
 		</el-row>
 		
 		<el-tabs class="result" v-model="activeTab" >
 			<el-tab-pane :label="$t('label.result')" name="table" disabled v-hasAuth="authKey.query">
 				<!-- list -->
-				<el-table size="mini" :data="list" highlight-current-row border v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" class="mytable" >
+				<el-table  :data="list" highlight-current-row border v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" class="mytable" >
 					<template v-for="(item, name) in fields">
 						<el-table-column  
 							v-if="!(item.table.show == false || item.show == false && !(item.show == false && item.table.show == true))" 
@@ -51,54 +51,93 @@
 							:width="item.table.width"
 							:fixed="item.table.fixed"
 							:formatter="item.table.formatter"
-							:min-width="tableMaxWidth['1']" class-name="table-drugs-1">
+							:min-width="tableMaxWidth[name]" :class-name="'tableFlexWidth-'+name">
 
 						</el-table-column>
 					</template>
 					
-					<!-- <el-table-column fixed="right" label="操作" width="100" align="center">
-						<template scope="scope">
-							<el-dropdown size="mini">
-							  <el-button type="primary" size="mini">
+					<el-table-column fixed="right" :label="$t('label.action')" width="100" align="center">
+						<template slot-scope="scope">
+							<el-dropdown >
+							  <el-button type="primary" >
 								   <i class="fas fa-cog"></i>
 							  </el-button>
 							  <el-dropdown-menu slot="dropdown">
-								<el-dropdown-item @click.native="handleEdit(scope.$index, scope.row)" ref="edit" auth="sys:user:update" v-show="hasAuth('edit')">
-									<i class="fas fa-edit"></i>&nbsp;编辑
+								<el-dropdown-item @click.native="handleEdit(scope.$index, scope.row)"  v-hasAuth="authKey.edit">
+									<i class="fas fa-edit"></i>&nbsp;{{$t('label.title.edit')}}
 								</el-dropdown-item>
-								<el-dropdown-item @click.native="handleResetPWD(scope.$index, scope.row)" divided  ref="resetPwd" auth="sys:user:resetPwd" v-show="hasAuth('resetPwd')">
-									<i class="fas fa-key"></i>&nbsp;重置密码
+								<el-dropdown-item @click.native="handleResetPwd(scope.$index, scope.row)" divided v-hasAuth="authKey.resetPwd">
+									<i class="fas fa-key"></i>&nbsp;{{$t('user.button.resetPwd')}}
 								</el-dropdown-item>
-								<el-dropdown-item @click.native="handleAuth(scope.$index, scope.row)" ref="auth" auth="sys:user:auth" v-show="hasAuth('auth')">
-									<i class="fas fa-user-lock"></i>&nbsp;授权
+								<el-dropdown-item @click.native="handleMenuAuth(scope.$index, scope.row)" v-hasAuth="authKey.menuAuth">
+									<i class="fas fa-user-lock"></i>&nbsp;{{$t('user.button.menuAuth')}}
 								</el-dropdown-item>
-								<el-dropdown-item @click.native="handleAid(scope.$index, scope.row)" ref="aid" auth="sys:user:aid" v-show="hasAuth('aid')">
-									<i class="fas fa-map-pin"></i>&nbsp;分配航标
-								</el-dropdown-item>
-								<el-dropdown-item @click.native="handleStore(scope.$index, scope.row)" ref="store" auth="sys:user:store" v-show="hasAuth('store')">
-									<i class="fas fa-map-pin"></i>&nbsp;分配仓库
-								</el-dropdown-item>
-								<el-dropdown-item @click.native="handleDel(scope.$index, scope.row)" divided style="color: #f56c6c;" ref="delete" auth="sys:user:delete" v-show="hasAuth('delete')">
-									<i class="fas fa-trash-alt"></i>&nbsp;删除
+								<el-dropdown-item @click.native="handleDel(scope.$index, scope.row)" divided v-hasAuth="authKey.del" style="color: #f56c6c;" >
+									<i class="fas fa-trash-alt"></i>&nbsp;{{$t('label.title.del')}}
 								</el-dropdown-item>
 							  </el-dropdown-menu>
 							</el-dropdown>
 						</template>
-					</el-table-column> -->
+					</el-table-column>
 				</el-table>
 		
 				<!-- page tool -->
-				<el-col :span="24" class="toolbar">
-					<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">Batch remove</el-button> -->
+				<el-col :span="24" class="toolbar" style="margin-top: 10px;">
+					<!-- <el-button type="danger" @click="handleBatchDel" :disabled="this.sels.length===0" v-hasAuth="authKey.batchDel">{{$t('label.title.batchDel')}}</el-button> -->
 					<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100]" :page-size="rows" :total="total" style="float:right;">
 					</el-pagination>
 				</el-col>
 			</el-tab-pane>
-		  </el-tabs>
+		</el-tabs>
 		
+		<!-- add -->
+		<el-dialog :title="$t('label.title.add')" :visible.sync="addFormVisible" :close-on-click-modal="false">	
+			<el-form :model="addForm" :rules="addFormRules" ref="addForm" label-width="120px">
+			  <el-form-item label="用户名" prop="sUser_UserName">
+			    <el-input v-model="addForm.sUser_UserName"></el-input>
+			  </el-form-item>
+			  <el-form-item label="密码" prop="sUser_PassWord">
+			    <el-input type="password" v-model="addForm.sUser_PassWord"></el-input>
+			  </el-form-item>
+			  <el-form-item label="确认密码" prop="sUser_PassWord2">
+			    <el-input type="password" v-model="addForm.sUser_PassWord2"></el-input>
+			  </el-form-item>
+			  <el-form-item label="昵称" prop="sUser_Nick">
+			    <el-input v-model="addForm.sUser_Nick"></el-input>
+			  </el-form-item>
+			  <el-form-item label="所属用户组" prop="sUser_GroupID">
+			    <el-select v-model="addForm.sUser_GroupID" placeholder="请选择用户组">
+				    <el-option
+				      v-for="item in groupOptions"
+				      :key="item.value"
+				      :label="item.name"
+				      :value="item.value">
+				    </el-option>
+			    </el-select>
+			  </el-form-item>
+			  <el-form-item label="状态" prop="lUser_StatusFlag">
+			     <el-switch v-model="addForm.lUser_StatusFlag" :active-value="1" :inactive-value="0"></el-switch>
+			  </el-form-item>
+			  <el-form-item label="QQ" prop="sUser_QQ">
+			    <el-input v-model="addForm.sUser_QQ"></el-input>
+			  </el-form-item>
+			  <el-form-item label="邮箱" prop="sUser_Email">
+			    <el-input v-model="addForm.sUser_Email"></el-input>
+			  </el-form-item>
+			  <el-form-item label="电话" prop="sUser_Phone">
+			    <el-input v-model="addForm.sUser_Phone"></el-input>
+			  </el-form-item>
+			  <el-form-item label="第三方ID" prop="sUser_ThirdID">
+			    <el-input v-model="addForm.sUser_ThirdID"></el-input>
+			  </el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button size="mini" @click="addClose">取消</el-button>
+				<el-button size="mini" type="primary" @click="addSubmit" :loading="addLoading">提交</el-button>
+			</div>
+		</el-dialog>
 		
-		
-  </div>
+	</div>
 </template>
 
 <script>
@@ -111,19 +150,6 @@ export default {
 				activeTab: 'table',
 				filters: {
 				},
-				tableMaxWidth: {
-					'1': 0,
-					'2': 0,
-					'3': 0,
-					'4': 0,
-					'5': 0,
-					'6': 0,
-					'7': 0,
-					'8': 0,
-					'9': 0,
-					'10': 0,
-					'11': 0,
-				},
 				list: [],
 				total: 0,
 				page: 1,
@@ -131,6 +157,7 @@ export default {
 				listLoading: false,
 				sels: [],
 				preloading: false,
+				tableMaxWidth: {},
 				
 				//auth
 				menuFuns: '',
@@ -141,6 +168,9 @@ export default {
 					del: 'sys:user:delete',
 					import: 'sys:user:import',
 					export: 'sys:user:export',
+					batchDel: '',
+					resetPwd: 'sys:user:export',
+					menuAuth: 'sys:user:export',
 				},
 				authCache: {},
 				
@@ -169,8 +199,8 @@ export default {
 							  }
 						}, trigger: 'blur' },*/
 						{ validator: (rule, value, callback) => {
-							  if (this.pwdReg && !this.pwdReg.test(this.addForm.sUser_PassWord) ) {
-								callback(new Error('密码格式不正确!'+this.pwdRegStr));
+							  if (this.$store.state.pwdReg && !this.$store.state.pwdReg.test(this.addForm.sUser_PassWord) ) {
+								callback(new Error('密码格式不正确!'+this.$store.state.pwdRegTips));
 							  } else {
 								callback();
 							  }
@@ -440,15 +470,18 @@ export default {
 			}
 	},
   
-	/* watch:{
+	watch:{
 		//表格宽度自适应
 		list: function(){
+			if(!this.tableMaxWidth){
+				return;
+			}
 			this.$nextTick(function () { 
-				for ( var key in this.tableMaxWidth) {
+				for ( var key in this.fields) {
 					let tempMaxWidth = 0;
 					try {
-						for (let i = 0; i <  document.getElementsByClassName("table-drugs-"+key).length; i++){
-							let element =  document.getElementsByClassName("table-drugs-"+key)[i];
+						for (let i = 0; i <  document.getElementsByClassName("tableFlexWidth-"+key).length; i++){
+							let element =  document.getElementsByClassName("tableFlexWidth-"+key)[i];
 							let width = element.querySelectorAll('div')[0].offsetWidth;
 							tempMaxWidth = tempMaxWidth < width ? width : tempMaxWidth;
 						}
@@ -459,7 +492,7 @@ export default {
 				}
 			});
 		}
-	}, */
+	}, 
 	methods: {
 		dateFormatter: function(row){
 			return this.formatDate(row[this.$store.state.fields.user.createDate], 'yyyy-MM-dd HH:mm:ss');
@@ -543,6 +576,53 @@ export default {
 		},
 		//新增
 		handleAdd: function(){
+			if(!this.hasAuth(this.authKey.add)){
+				this.$message.error(i18n.t("res.message.noAuth"));
+				return;
+			}
+			this.addFormVisible = true;
+			this.addForm = {};
+		},
+		addClose: function () {
+			this.addFormVisible = false;
+			this.addLoading = false;
+			this.$refs.addForm.resetFields();
+		},
+		addSubmit: function () {
+			this.$refs.addForm.validate((valid) => {
+				if (valid) {
+					this.$confirm(i18n.t('confirm.content'), i18n.t('confirm.title'), {}).then(() => {
+						var params = Object.assign({}, this.addForm);
+						var self = this;
+						this.addLoading = true;
+						this.ajaxReq(addUrl, params, function(res){
+							self.addLoading = false;
+							self.handleResOperate(res, function(){
+								self.addFormVisible = false;
+								self.getList();
+							});
+						});
+					});
+				}
+			});
+		},
+		//修改
+		handleEdit: function(){
+
+		},
+		//删除
+		handleDel: function(){
+
+		},
+		handleBatchDel: function(){
+
+		},
+		//重置密码
+		handleResetPwd: function(){
+
+		},
+		//菜单授权
+		handleMenuAuth: function(){
 
 		},
 		//导入

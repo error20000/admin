@@ -145,18 +145,18 @@ export default {
       this.$refs.pwdForm.resetFields();
     },
     pwdChange: function() {
-      this.$refs.pwdForm.validate(function(valid) {
+      this.$refs.pwdForm.validate((valid) => {
         if (valid) {
           this.$confirm(
             i18n.t("confirm.content"),
             i18n.t("confirm.title"),
             {}
-          ).then(function() {
+          ).then(() => {
             var params = Object.assign({}, this.pwdForm);
             delete params.newPwd2;
             var self = this;
             this.pwdLoading = true;
-            ajaxReq(changePwdUrl, params, function(res) {
+            this.ajaxReq(changePwdUrl, params, function(res) {
               self.pwdLoading = false;
               self.handleResOperate(res, function() {
                 self.pwdFormVisible = false;
@@ -174,20 +174,20 @@ export default {
         i18n.t("logout.confirm.content"),
         i18n.t("logout.confirm.title"),
         {
-          //type: 'warning'
+          type: 'warning'
         }
       )
-        .then(function() {
+        .then(() => {
           var self = this;
           var params = {};
-          ajaxReq(logoutUrl, params, function(res) {
+          this.ajaxReq(logoutUrl, params, function(res) {
             self.handleResQuery(res, function() {
               localStorage.removeItem(LOCALE_LOIN_USER_KEY);
               parent.window.location.href = LOCALE_LOIN_URL;
             });
           });
         })
-        .catch(function() {});
+        .catch(() => {});
     },
     userAuthMenu: function() {
       let treeStr = localStorage.getItem(this.$store.state.storage.menusTreeDataKey);

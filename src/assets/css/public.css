@@ -32,3 +32,9 @@ a:focus,a:hover {
 }
 
 /* element */
+
+.el-table .cell {
+  white-space: nowrap !important;
+  display: inline-block;
+	width: initial !important;
+}

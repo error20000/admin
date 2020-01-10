@@ -4,6 +4,7 @@ const zhCN = require('element-ui/lib/locale/lang/zh-CN');
 const zh = Object.assign({
     name: "中文",
     sysName: "后台管理",
+    pwdRegTips: "（密码至少包含 数字和英文，长度6-20）",
     res:{
         message: {
             success: "成功",
@@ -16,12 +17,17 @@ const zh = Object.assign({
     label: {
         filter: "筛选",
         result: "结果",
+        action: "操作",
         title: {
             query: "查询",
             reset: "重置",
             import: "导入",
             export: "导出",
             add: "新增",
+            edit: "编辑",
+            view: "查看",
+            del: "删除",
+            batchDel: "批量删除",
         }
     },
     confirm:{
@@ -45,7 +51,7 @@ const zh = Object.assign({
     logout: {
         confirm:{
             title: "提示",
-            content: "确定退出系统吗？", 
+            content: "确定退出系统吗？",
         }
     },
     dialog: {
@@ -98,6 +104,10 @@ const zh = Object.assign({
             email: "邮箱",
             phone: "电话",
             third: "第三方ID",
+        },
+        button: {
+            resetPwd: "重置密码",
+            menuAuth: "菜单授权",
         }
     }
 }, zhCN.default);
