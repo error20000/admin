@@ -58,13 +58,13 @@
       :close-on-click-modal="false"
     >
       <el-form size="mini" :model="pwdForm" :rules="pwdFormRules" ref="pwdForm" label-width="120px">
-        <el-form-item :label="$t('index.changePassword.form.oldPwd')" prop="oldPwd">
+        <el-form-item :label="$t('pwd.form.oldPwd')" prop="oldPwd">
           <el-input type="text" v-model="pwdForm.oldPwd"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('index.changePassword.form.newPwd')" prop="newPwd">
+        <el-form-item :label="$t('pwd.form.newPwd')" prop="newPwd">
           <el-input type="text" v-model="pwdForm.newPwd"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('index.changePassword.form.newPwd2')" prop="newPwd2">
+        <el-form-item :label="$t('pwd.form.newPwd2')" prop="newPwd2">
           <el-input type="text" v-model="pwdForm.newPwd2"></el-input>
         </el-form-item>
       </el-form>
@@ -106,20 +106,26 @@ export default {
       pwdFormVisible: false,
       pwdLoading: false,
       pwdFormRules: {
-        oldPwd: [{ required: true, message: i18n.t('index.changePassword.rules.oldPwd'), trigger: "blur" }],
-        newPwd: [{ required: true, message: i18n.t('index.changePassword.rules.newPwd'), trigger: "blur" }],
+        oldPwd: [{ required: true, message: i18n.t('pwd.rules.oldPwd'), trigger: "blur" }],
+        newPwd: [{ required: true, message: i18n.t('pwd.rules.newPwd'), trigger: "blur" },
+            { validator: (rule, value, callback) => {
+							  if (this.$store.state.pwdReg && !this.$store.state.pwdReg.test(this.pwdForm.newPwd) ) {
+								callback(new Error(i18n.t('pwd.rules.format')+this.$store.state.pwdRegTips));
+							  } else {
+								callback();
+							  }
+						}, trigger: 'blur' }
+        ],
         newPwd2: [
-          { required: true, message: i18n.t('index.changePassword.rules.newPwd2'), trigger: "blur" },
+          { required: true, message: i18n.t('pwd.rules.newPwd2'), trigger: "blur" },
           {
             validator: (rule, value, callback) => {
               if (value !== this.pwdForm.newPwd) {
-                callback(new Error(i18n.t('index.changePassword.rules.newPwd3')));
+                callback(new Error(i18n.t('pwd.rules.same')));
               } else {
                 callback();
               }
-            },
-            trigger: "blur"
-          }
+            },trigger: "blur"}
         ]
       },
       pwdForm: {

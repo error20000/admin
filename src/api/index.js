@@ -10,6 +10,12 @@ module.exports = {
     //user
     userUrl: {
         query: "/api/user/findPage",
+        one: "/api/user/findOne",
+        add: "/api/user/add",
+        edit: "/api/user/update",
+        del: "/api/user/delete",
+        export: "/api/user/excel",
+        import: "/api/user/import",
     },
     //group
     groupUrl: {

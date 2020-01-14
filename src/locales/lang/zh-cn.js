@@ -4,7 +4,6 @@ const zhCN = require('element-ui/lib/locale/lang/zh-CN');
 const zh = Object.assign({
     name: "中文",
     sysName: "后台管理",
-    pwdRegTips: "（密码至少包含 数字和英文，长度6-20）",
     res:{
         message: {
             success: "成功",
@@ -28,17 +27,42 @@ const zh = Object.assign({
             view: "查看",
             del: "删除",
             batchDel: "批量删除",
+            upload: "上传",
         }
     },
     confirm:{
         title: "提示",
         content: "确定提交吗?", 
+        content2: "确定删除该条记录吗?",
+    },
+    status: {
+        disable: "禁用",
+        enable: "启用",
+    },
+    pwd: {
+        regTips: "（密码至少包含 数字和英文，长度6-20）",
+        form: {
+            oldPwd: "旧密码",
+            newPwd: "新密码",
+            newPwd2: "确认新密码",
+            pwd: "密码",
+            pwd2: "确认密码",
+        },
+        rules: {
+            oldPwd: "请输入旧密码",
+            newPwd: "请输入新密码",
+            newPwd2: "请再次输入新密码",
+            same: "两次输入密码不一致!",
+            format: "密码格式不正确!",
+            pwd: "请输入密码",
+            pwd2: "请再次输入密码",
+        }
     },
     login: {
         title: "账号登录",
         rules:{
             username: "请输入用户名",
-            password: "请请输入密码",
+            password: "请输入密码",
         },
         placeholder:{
             username: "用户名",
@@ -67,17 +91,6 @@ const zh = Object.assign({
         changePassword: {
             dialog: {
                 title: "密码修改",
-            },
-            form: {
-                oldPwd: "旧密码",
-                newPwd: "新密码",
-                newPwd2: "确认新密码",
-            },
-            rules: {
-                oldPwd: "请输入旧密码",
-                newPwd: "请输入新密码",
-                newPwd2: "再次输入新密码",
-                newPwd3: "密码不一致!",
             }
         }
     },
@@ -95,6 +108,11 @@ const zh = Object.assign({
             username: "请输入用户名",
             group: "请选择用户组",
         },
+        rules:{
+            username: "请输入用户名",
+            nick: "请输入用户昵称",
+            group: "请选择用户组",
+        },
         fields:{
             username: "用户名",
             nick: "昵称",
@@ -104,6 +122,7 @@ const zh = Object.assign({
             email: "邮箱",
             phone: "电话",
             third: "第三方ID",
+            password2: "确认密码",
         },
         button: {
             resetPwd: "重置密码",

@@ -8,7 +8,7 @@ export default new Vuex.Store({
     	loginTitle: i18n.t('login.title'),
     	sysName: i18n.t('sysName'),
 		pwdReg: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/,
-		pwdRegTips: i18n.t('pwdRegTips'),
+		pwdRegTips: i18n.t('pwd.regTips'),
     	//本地存储
     	storage:{
       		menusTreeDataKey: 'menusTreeData', //菜单树
