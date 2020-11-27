@@ -664,6 +664,10 @@ export default {
 				self.handleResQuery(res, function(){
 					self.total = res.total;
 					self.list = res.data;
+					//test
+					self.list = self.list.concat(self.list);
+					self.list = self.list.concat(self.list);
+					self.list = self.list.concat(self.list);
 					/*if(self.page != 1 && self.total <= (self.page - 1) * self.rows){
 						self.page = self.page - 1;
 						self.getList();

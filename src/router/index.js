@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/views/Login.vue'
 import Index from '@/views/Index.vue'
+import Layout from '@/views/layout/Layout.vue'
 
 Vue.use(VueRouter)
 
@@ -24,6 +25,11 @@ const routes = [
     component: Index
   },
   {
+    path: '/layout',
+    name: 'layout',
+    component: Layout
+  },
+  {
     path: '/',
     name: 'index',
     component: Index,
@@ -42,6 +48,16 @@ const routes = [
     path: '/test2',
     name: 'test',
     component: page('Test')
+  },
+  {
+    path: '/index2',
+    name: 'index2',
+    component: page('Index2')
+  },
+  {
+    path: '/layout2',
+    name: 'layout',
+    component: page('layout/Layout')
   }
 ]
 
